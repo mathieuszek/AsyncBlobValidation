@@ -3,9 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace File.Service.Features.Items.ListItemStorages;
 
-public sealed class ListItemStoragesHttpFunction(ILogger<ListItemStoragesHttpFunction> logger)
+public sealed class ListItemStoragesHttpFunction(ILogger<ListItemStoragesHttpFunction> logger, IMediator mediator)
 {
     private readonly ILogger<ListItemStoragesHttpFunction> _logger = logger;
+    private readonly IMediator _mediator = mediator;
 
     /// <summary>
     /// HTTP GET triggered by any incoming message passed to <see cref="QueueTriggerName"/>.
@@ -13,10 +14,17 @@ public sealed class ListItemStoragesHttpFunction(ILogger<ListItemStoragesHttpFun
     /// </summary>
     /// <param name="message">Message with data.</param>
     [Function(nameof(ListItemStoragesHttpFunction))]
-    public IActionResult Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
+    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
     {
         _logger.LogHttpMessage();
 
-        return new OkObjectResult("Welcome to Azure Functions!");
+        var query = new ListItemStoragesQuery();
+        var resultItems = new List<ListItemStoragesResponse>();
+        await foreach (var item in _mediator.CreateStream(query))
+        {
+            resultItems.Add(new(item));
+        }
+
+        return new OkObjectResult(resultItems);
     }
 }
