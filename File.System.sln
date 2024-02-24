@@ -13,6 +13,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{0A341D49-07A
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "File.Service", "src\File.Service\File.Service.csproj", "{2C3CE12A-0755-44EE-8839-7AB89D8AA06E}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{1ABF1689-B79D-4671-BBD7-B47E275F3C81}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "tests\UnitTests\UnitTests.csproj", "{19E5182A-D3A5-49B7-AF2B-7B45B71A0640}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -23,11 +27,16 @@ Global
 		{2C3CE12A-0755-44EE-8839-7AB89D8AA06E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2C3CE12A-0755-44EE-8839-7AB89D8AA06E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2C3CE12A-0755-44EE-8839-7AB89D8AA06E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{19E5182A-D3A5-49B7-AF2B-7B45B71A0640}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{19E5182A-D3A5-49B7-AF2B-7B45B71A0640}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{19E5182A-D3A5-49B7-AF2B-7B45B71A0640}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{19E5182A-D3A5-49B7-AF2B-7B45B71A0640}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{2C3CE12A-0755-44EE-8839-7AB89D8AA06E} = {0A341D49-07AC-4559-9F63-7367282A17A4}
+		{19E5182A-D3A5-49B7-AF2B-7B45B71A0640} = {1ABF1689-B79D-4671-BBD7-B47E275F3C81}
 	EndGlobalSection
 EndGlobal
