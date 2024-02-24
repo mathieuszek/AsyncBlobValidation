@@ -20,3 +20,74 @@ Before first run ensure that you have installed following tools:
 ## Optional
 
 - `Podman` or `Docker` to run `Azurite` as container,
+
+## Local Development
+
+To use application locally you need to create `local.settings.json` file in `src/File.Service` directory with following data:
+
+```json
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "dotnet-isolated",
+    "InputMessageQueue": "<input-message-queue>",
+    "BlobStorage:ItemsContainerName": "items"
+  },
+  "ConnectionStrings": {
+    "DefaultBlob": "<storage-connection-string>"
+  }
+}
+
+```
+
+To do so you need to prepare your environment by:
+
+1. Run `Azurite` i.e.:
+   ```powershell
+   docker run -p 10000:10000 -p 10001:10001 -p 10002:10002 mcr.microsoft.com/azure-storage/azurite
+   ```
+
+2. Open `Microsoft Azure Storage Explorer`.
+
+3. Go to `Emulator & Attached` > `Storage Accounts` > `(Emulator - Default Ports)`
+   - go to `Properties` section, copy `Primary Connection String` and replace `<storage-connection-string>` value in `local.settings.json` by copied value,
+   - expand `Queues` and create new one and use the new queue name to replace `<input-message-queue>` value in `local.settings.json`,
+
+Then you should be able to run the project :D
+
+## Testing
+
+### Unit Tests
+
+To run unit tests just run:
+```powershell
+dotnet tests .\tests\UnitTests\UnitTests.csproj
+```
+
+### Functional Tests
+
+### Preparation
+
+1. Start project.
+
+#### Uploading File
+
+1. Happy path :smile::
+   1. Go to `Emulator & Attached` > `Storage Accounts` > `(Emulator - Default Ports)` > `Queues`,
+   2. Open your queue.
+   3. Add valid message: `{ "description": "Text" }`
+   4. In `Storage Explorer` open `Blob Containers` > `items` and verify if new blob was created.
+
+2. Sad path :frowning::
+   1. Go to `Emulator & Attached` > `Storage Accounts` > `(Emulator - Default Ports)` > `Queues`,
+   2. Open your queue.
+   3. Add valid message: `{ "description": "" }` (because description cannot be empty)
+   4. You should see `Warning` printed in log console and no new blob should be created.
+
+#### List Uploaded Blobs
+
+1. Go to `Emulator & Attached` > `Storage Accounts` > `(Emulator - Default Ports)` > `Queues`,
+2. Open your `Blob Containers` > `items`.
+3. Verify the amount and names of the messages.
+4. Send request from [list-item-storages.http](/http/items/list-item-storages.http) or just click: http://localhost:7071/api/ListItemStoragesHttpFunction
