@@ -2,6 +2,8 @@ using File.Service.Features.Items.ListItemStorages;
 using File.Service.Features.Items.StoreItem;
 using File.Service.Settings;
 
+using FluentValidation;
+
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
     .ConfigureServices((context, services) =>
@@ -23,6 +25,7 @@ var host = new HostBuilder()
 
         services.AddScoped<IListStoredItemsService, ListStoredItemsBlobService>();
         services.AddScoped<IStoreItemService, ItemsBlobStorageService>();
+        services.AddScoped<IValidator<StoreItemMessage>, StoreItemMessageValidator>();
     })
     .Build();
 

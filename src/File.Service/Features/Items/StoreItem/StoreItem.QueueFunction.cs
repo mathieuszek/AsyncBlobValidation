@@ -1,13 +1,17 @@
-using Azure.Storage.Queues.Models;
+using FluentValidation;
 
 namespace File.Service.Features.Items.StoreItem;
 
-public sealed class StoreItemQueueFunction(ILogger<StoreItemQueueFunction> logger, IMediator mediator)
+public sealed class StoreItemQueueFunction(
+    ILogger<StoreItemQueueFunction> logger,
+    IMediator mediator,
+    IValidator<StoreItemMessage> validator)
 {
     private const string QueueTriggerName = "%InputMessageQueue%";
 
     private readonly ILogger<StoreItemQueueFunction> _logger = logger;
     private readonly IMediator _mediator = mediator;
+    private readonly IValidator<StoreItemMessage> _validator = validator;
 
     /// <summary>
     /// Queue triggered by any incoming message passed to <see cref="QueueTriggerName"/>.
@@ -16,14 +20,19 @@ public sealed class StoreItemQueueFunction(ILogger<StoreItemQueueFunction> logge
     /// <param name="message">Message with data.</param>
     [Function(nameof(StoreItemQueueFunction))]
     public async Task Run(
-        [QueueTrigger(QueueTriggerName)] QueueMessage message,
+        [QueueTrigger(QueueTriggerName)] StoreItemMessage message,
         CancellationToken cancellationToken)
     {
-        ArgumentNullException.ThrowIfNull(message);
+        _logger.LogQueueMessage(message.ToString());
 
-        _logger.LogQueueMessage(message.MessageText);
+        if (await _validator.ValidateAsync(message, cancellation: cancellationToken) is { IsValid: false } validationError)
+        {
+            _logger.LogValidationErrors(validationError.Errors);
+            return;
+        }
 
-        var command = new StoreItemCommand(message.MessageText);
+        var command = new StoreItemCommand(message.Description);
+
         await _mediator.Send(command, cancellationToken: cancellationToken);
     }
 }
