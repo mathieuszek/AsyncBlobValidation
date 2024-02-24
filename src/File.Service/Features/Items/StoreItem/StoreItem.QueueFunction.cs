@@ -1,7 +1,5 @@
 using Azure.Storage.Queues.Models;
 
-using MediatR;
-
 namespace File.Service.Features.Items.StoreItem;
 
 public sealed class StoreItemQueueFunction(ILogger<StoreItemQueueFunction> logger, IMediator mediator)
@@ -17,13 +15,15 @@ public sealed class StoreItemQueueFunction(ILogger<StoreItemQueueFunction> logge
     /// </summary>
     /// <param name="message">Message with data.</param>
     [Function(nameof(StoreItemQueueFunction))]
-    public async Task Run([QueueTrigger(QueueTriggerName)] QueueMessage message)
+    public async Task Run(
+        [QueueTrigger(QueueTriggerName)] QueueMessage message,
+        CancellationToken cancellationToken)
     {
         ArgumentNullException.ThrowIfNull(message);
 
         _logger.LogQueueMessage(message.MessageText);
 
         var command = new StoreItemCommand(message.MessageText);
-        await _mediator.Send(command);
+        await _mediator.Send(command, cancellationToken: cancellationToken);
     }
 }

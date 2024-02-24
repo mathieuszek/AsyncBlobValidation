@@ -17,7 +17,7 @@ public sealed class StoreItemHandler(IStoreItemService storageService) : IComman
     {
         var item = new Item(request.Description);
 
-        await _storageService.StoreAsync(item, cancellationToken);
+        await _storageService.StoreAsync(item, cancellationToken: cancellationToken);
 
         return Result.Success();
     }

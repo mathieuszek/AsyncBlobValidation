@@ -14,13 +14,15 @@ public sealed class ListItemStoragesHttpFunction(ILogger<ListItemStoragesHttpFun
     /// </summary>
     /// <param name="message">Message with data.</param>
     [Function(nameof(ListItemStoragesHttpFunction))]
-    public async Task<IActionResult> Run([HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req)
+    public async Task<IActionResult> Run(
+        [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req,
+        CancellationToken cancellationToken)
     {
         _logger.LogHttpMessage();
 
         var query = new ListItemStoragesQuery();
         var resultItems = new List<ListItemStoragesResponse>();
-        await foreach (var item in _mediator.CreateStream(query))
+        await foreach (var item in _mediator.CreateStream(query, cancellationToken: cancellationToken))
         {
             resultItems.Add(new(item));
         }
