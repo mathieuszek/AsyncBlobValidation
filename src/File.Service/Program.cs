@@ -1,4 +1,5 @@
 using File.Service.Features.Items.StoreItem;
+using File.Service.Settings;
 
 var host = new HostBuilder()
     .ConfigureFunctionsWebApplication()
@@ -8,6 +9,18 @@ var host = new HostBuilder()
         {
             configuration.RegisterServicesFromAssembly(typeof(StoreItemHandler).Assembly);
         });
+
+        services.AddAzureClients(builder =>
+        {
+            var blobConnectionString = context.Configuration.GetConnectionString("DefaultBlob")
+                ?? throw new InvalidDataException("ConnectionString__DefaultBlob must be defined.");
+            builder.AddBlobServiceClient(blobConnectionString);
+        });
+        services
+            .AddOptions<BlobStorageSettings>()
+            .Bind(context.Configuration.GetSection(BlobStorageSettings.SettingsKey));
+
+        services.AddScoped<IStoreItemService, ItemsBlobStorageService>();
     })
     .Build();
 

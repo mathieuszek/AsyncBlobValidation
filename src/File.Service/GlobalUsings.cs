@@ -1,4 +1,5 @@
 global using Microsoft.Azure.Functions.Worker;
+global using Microsoft.Extensions.Azure;
 global using Microsoft.Extensions.Configuration;
 global using Microsoft.Extensions.DependencyInjection;
 global using Microsoft.Extensions.Hosting;
