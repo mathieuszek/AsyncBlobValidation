@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "File.Service": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7041",
+      "launchBrowser": false
+    }
+  }
+}
