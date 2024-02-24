@@ -1,0 +1,2 @@
+# List item storage paths
+GET http://localhost:7071/api/ListItemStoragesHttpFunction

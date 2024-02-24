@@ -1,19 +1,19 @@
 using Azure.Storage.Queues.Models;
 
-namespace File.Service.UploadFile;
+namespace File.Service.Features.Items.StoreItem;
 
-public sealed class FileUploader(ILogger<FileUploader> logger)
+public sealed class StoreItemQueueFunction(ILogger<StoreItemQueueFunction> logger)
 {
     private const string QueueTriggerName = "%InputMessageQueue%";
 
-    private readonly ILogger<FileUploader> _logger = logger;
+    private readonly ILogger<StoreItemQueueFunction> _logger = logger;
 
     /// <summary>
     /// Queue triggered by any incoming message passed to <see cref="QueueTriggerName"/>.
     /// Function prints incoming <paramref name="message"/>.
     /// </summary>
     /// <param name="message">Message with data.</param>
-    [Function(nameof(FileUploader))]
+    [Function(nameof(StoreItemQueueFunction))]
     public void Run([QueueTrigger(QueueTriggerName)] QueueMessage message)
     {
         ArgumentNullException.ThrowIfNull(message);
