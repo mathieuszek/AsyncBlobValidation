@@ -1,0 +1,19 @@
+# Manually trigger Queue Triggered Function
+
+# With valid message data
+POST http://localhost:7071/admin/functions/StoreItemQueueFunction
+Content-Type: application/json
+
+{
+    "input": "{ \"description\": \"Test\" }"
+}
+
+###
+
+# With invalid message data
+POST http://localhost:7071/admin/functions/StoreItemQueueFunction
+Content-Type: application/json
+
+{
+    "input": "{ \"description\": \"\" }"
+}
