@@ -56,6 +56,12 @@ To do so you need to prepare your environment by:
 
 Then you should be able to run the project :D
 
+## Contributing
+
+Best practices:
+1. Please use [http](/http/) directory to store every possible `Azure Functions` within solution. To do so you need to have [REST Client](https://github.com/Huachao/vscode-restclient) installed.
+2. The was used `Vertical Slice Architecture` which provides better granularity for features: https://www.jimmybogard.com/vertical-slice-architecture/.
+
 ## Testing
 
 ### Unit Tests
