@@ -3,11 +3,11 @@ using FluentValidation;
 namespace File.Service.Features.Items.StoreItem;
 
 /// <summary>
-/// Validates <see cref="StoreItemMessage"/>.
+/// Validates <see cref="StoreItemCommand"/>.
 /// </summary>
-public sealed class StoreItemMessageValidator : AbstractValidator<StoreItemMessage>
+public sealed class StoreItemCommandValidator : AbstractValidator<StoreItemCommand>
 {
-    public StoreItemMessageValidator()
+    public StoreItemCommandValidator()
     {
         RuleFor(message => message.Description)
             .NotNull()

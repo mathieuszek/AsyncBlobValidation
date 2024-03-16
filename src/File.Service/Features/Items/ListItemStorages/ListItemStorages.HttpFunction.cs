@@ -16,11 +16,11 @@ public sealed class ListItemStoragesHttpFunction(ILogger<ListItemStoragesHttpFun
     [Function(nameof(ListItemStoragesHttpFunction))]
     public async Task<IActionResult> Run(
         [HttpTrigger(AuthorizationLevel.Anonymous, "get")] HttpRequest req,
+        [FromQuery] ListItemStoragesQuery query,
         CancellationToken cancellationToken)
     {
         _logger.LogHttpMessage();
 
-        var query = new ListItemStoragesQuery();
         var resultItems = new List<ListItemStoragesResponse>();
         await foreach (var item in _mediator.CreateStream(query, cancellationToken: cancellationToken))
         {

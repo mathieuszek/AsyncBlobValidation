@@ -1,3 +1,4 @@
+using File.Service.Behaviors;
 using File.Service.Features.Items.ListItemStorages;
 using File.Service.Features.Items.StoreItem;
 using File.Service.Settings;
@@ -11,6 +12,7 @@ var host = new HostBuilder()
         services.AddMediatR(configuration =>
         {
             configuration.RegisterServicesFromAssembly(typeof(StoreItemHandler).Assembly);
+            configuration.AddOpenBehavior(typeof(ValidatorBehavior<,>));
         });
 
         services.AddAzureClients(builder =>
@@ -25,7 +27,7 @@ var host = new HostBuilder()
 
         services.AddScoped<IListStoredItemsService, ListStoredItemsBlobService>();
         services.AddScoped<IStoreItemService, ItemsBlobStorageService>();
-        services.AddScoped<IValidator<StoreItemMessage>, StoreItemMessageValidator>();
+        services.AddScoped<IValidator<StoreItemCommand>, StoreItemCommandValidator>();
     })
     .Build();
 
